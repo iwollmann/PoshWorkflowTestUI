@@ -1,0 +1,41 @@
+﻿<Window x:Class="PoshWorkflowTestUI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+ xmlns:sapt="clr-namespace:System.Activities.Presentation.Toolbox;assembly=System.Activities.Presentation"
+        Title="Workflow Editor" Height="500" Width="700" >
+    <Window.Resources>
+        <sys:String x:Key="AssemblyName">System.Activities, Version=4.0.0.0,
+Culture=neutral, PublicKeyToken=31bf3856ad364e35</sys:String>
+        <sys:String x:Key="MyAssemblyName">CustomActivities</sys:String>
+    </Window.Resources>
+    <Grid x:Name="mainGrid">
+        <Menu HorizontalAlignment="Left" VerticalAlignment="Top" Grid.ColumnSpan="3" Width="{Binding ElementName=mainGrid,Path=ActualWidth}">
+            <MenuItem Header="File">
+                <MenuItem Header="Save" HorizontalAlignment="Left" Width="140"/>
+                <MenuItem Header="Load" HorizontalAlignment="Left" Width="140"/>
+                <Separator HorizontalAlignment="Left" Width="140"/>
+                <MenuItem Header="Exit" HorizontalAlignment="Left" Width="140"/>
+            </MenuItem>
+            <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+            <MenuItem Click="OnRunClick">
+                <MenuItem.Header>
+                    <TextBlock Text="Run" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                </MenuItem.Header>
+                <MenuItem.Icon>
+                    <Image Source="./Content\Img\run_16.png"  HorizontalAlignment="Right"/>
+                </MenuItem.Icon>
+            </MenuItem>
+        </Menu>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition Width="4*" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="2*" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+    </Grid>
+</Window>
