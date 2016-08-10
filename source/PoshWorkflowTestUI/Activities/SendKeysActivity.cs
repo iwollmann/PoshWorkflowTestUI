@@ -3,6 +3,8 @@ using System.Activities;
 using System.Activities.Presentation;
 using System.Collections.Generic;
 using System.Linq;
+using System.Management.Automation;
+using System.Management.Automation.Runspaces;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -19,12 +21,11 @@ namespace PoshWorkflowTestUI.Activities
 
         protected override void Execute(NativeActivityContext context)
         {
-            MainWindow.pw.Commands.Clear();
-            MainWindow.pw.AddCommand("Set-WebDriverSessionSendKeys")
-                .AddParameters(new Dictionary<string, object>() {
-                    { "Element", ElementCssSelector.Get(context) },
-                    { "Keys",new string[] { Value.Get(context) } } });
-            MainWindow.pw.Invoke();
+            var command = new Command("Set-WebDriverSessionSendKeys");
+            command.Parameters.Add("Element", ElementCssSelector.Get(context));
+            command.Parameters.Add("Keys", new string[] { Value.Get(context) });
+
+            PSRunner.Instance.Invoke(command);
         }
 
         public Activity Create(DependencyObject target)

@@ -3,6 +3,8 @@ using System.Activities;
 using System.Activities.Presentation;
 using System.Collections.Generic;
 using System.Linq;
+using System.Management.Automation;
+using System.Management.Automation.Runspaces;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -17,9 +19,10 @@ namespace PoshWorkflowTestUI.Activities
         protected override void Execute(NativeActivityContext context)
         {
             var uriBuilder = new UriBuilder(Url.Get(context).ToString());
-            MainWindow.pw.Commands.Clear();
-            MainWindow.pw.AddCommand("Set-WebDriverSessionUrl").AddParameter("Url", uriBuilder.Uri.ToString());
-            MainWindow.pw.Invoke();
+            var command = new Command("Set-WebDriverSessionUrl");
+            command.Parameters.Add("Url", uriBuilder.Uri.ToString());
+
+            PSRunner.Instance.Invoke(command);
         }
 
         public Activity Create(DependencyObject target)

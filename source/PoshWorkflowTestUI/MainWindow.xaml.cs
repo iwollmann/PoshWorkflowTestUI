@@ -23,7 +23,7 @@ namespace PoshWorkflowTestUI
     public partial class MainWindow : Window
     {
         private WorkflowDesigner wd;
-        public static PowerShell pw;
+        private PSRunner _runner;
 
         public MainWindow()
         {
@@ -102,41 +102,15 @@ namespace PoshWorkflowTestUI
             var wf = System.Activities.XamlIntegration.ActivityXamlServices.Load(workflowStream);
             var app = new WorkflowApplication(wf);
 
-            pw = PowerShell.Create();
-
-            StartDriver();
-            ImportPSModules();
-
-            pw.AddCommand("New-WebDriverSession").AddParameter("Url", "http://localhost:9515/");
-
-            pw.Invoke();
+            _runner = PSRunner.Instance;
+            _runner.StartSession();
 
             app.Run();
 
             app.Completed = (x) =>
             {
-                pw.Dispose();
+                //pw.Dispose();
             };
-        }
-
-        private void ImportPSModules()
-        {
-            pw.AddScript(string.Format("Import-Module {0}", Path.GetFullPath(@"../../../packages\PoshWebDriver.0.0.1\lib\net45\PoshWebDriver.dll")));
-            pw.Invoke();
-            pw.Commands.Clear();
-        }
-
-        private void StartDriver()
-        {
-            pw.AddCommand("Get-Process").AddArgument("chromedriver");
-            Collection<PSObject> result = pw.Invoke();
-            pw.Commands.Clear();
-
-
-            if (result.Count == 0)
-            {
-                pw.AddCommand("Start-Process").AddArgument(Path.GetFullPath(@"../../../../tools\chromedriver\chromedriver.exe"));
-            }
         }
     }
 }
