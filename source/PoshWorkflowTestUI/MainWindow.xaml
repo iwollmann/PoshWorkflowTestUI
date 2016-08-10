@@ -12,8 +12,8 @@ Culture=neutral, PublicKeyToken=31bf3856ad364e35</sys:String>
     <Grid x:Name="mainGrid">
         <Menu HorizontalAlignment="Left" VerticalAlignment="Top" Grid.ColumnSpan="3" Width="{Binding ElementName=mainGrid,Path=ActualWidth}">
             <MenuItem Header="File">
-                <MenuItem Header="Save" HorizontalAlignment="Left" Width="140"/>
-                <MenuItem Header="Load" HorizontalAlignment="Left" Width="140"/>
+                <MenuItem Header="Open" HorizontalAlignment="Left" Width="140" Click="OnOpenClick"/>
+                <MenuItem Header="Save" HorizontalAlignment="Left" Width="140" Click="OnSaveClick"/>
                 <Separator HorizontalAlignment="Left" Width="140"/>
                 <MenuItem Header="Exit" HorizontalAlignment="Left" Width="140"/>
             </MenuItem>

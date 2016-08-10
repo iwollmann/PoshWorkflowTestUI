@@ -16,6 +16,8 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Linq;
+using Microsoft.Win32;
+using System.Windows.Controls.Primitives;
 
 namespace PoshWorkflowTestUI
 {
@@ -35,24 +37,22 @@ namespace PoshWorkflowTestUI
             this.AddPropertyInspector();
         }
 
-        private void AddDesigner()
+        private void AddDesigner(string workflowFile = "")
         {
-            //Create an instance of WorkflowDesigner class.
             this.wd = new WorkflowDesigner();
 
-            //Place the designer canvas in the middle column of the grid.
+            if (string.IsNullOrEmpty(workflowFile) == false)
+                this.wd.Load(workflowFile);
+            else
+                this.wd.Load(new Flowchart());
+
             Grid.SetColumn(this.wd.View, 1);
             Grid.SetRow(this.wd.View, 1);
             Grid.SetRowSpan(this.wd.View, 2);
-
-            //Load a new Flow as default.
-            this.wd.Load(new Flowchart());
-
-            //Hide variables and other items
+            
             var designerView = wd.Context.Services.GetService<DesignerView>();
             designerView.WorkflowShellBarItemVisibility = ShellBarItemVisibility.MiniMap | ShellBarItemVisibility.Zoom;
 
-            //Add the designer canvas to the grid.
             mainGrid.Children.Add(this.wd.View);
         }
 
@@ -65,10 +65,8 @@ namespace PoshWorkflowTestUI
 
         private ToolboxControl GetToolboxControl()
         {
-            // Create the ToolBoxControl.
             ToolboxControl ctrl = new ToolboxControl();
 
-            // Create a category.
             ToolboxCategory commandsCategory = new ToolboxCategory("Commands");
 
             this.GetType().Assembly.GetTypes().Where(x => x.BaseType == typeof(NativeActivity))
@@ -111,6 +109,32 @@ namespace PoshWorkflowTestUI
             {
                 //pw.Dispose();
             };
+        }
+
+        private void OnSaveClick(object sender, System.Windows.RoutedEventArgs e)
+        {
+            var dialogSave = new SaveFileDialog();
+            dialogSave.Title = "Save Workflow";
+            dialogSave.Filter = "Workflows (.xaml)|*.xaml";
+
+            if (dialogSave.ShowDialog() == true)
+            {
+                wd.Save(dialogSave.FileName);
+            }
+        }
+
+        private void OnOpenClick(object sender, System.Windows.RoutedEventArgs e)
+        {
+            MessageBox.Show("Not implemented yet!");
+            //var dialogOpen = new OpenFileDialog();
+            //dialogOpen.Title = "Open Workflow";
+            //dialogOpen.Filter = "Workflows (.xaml)|*.xaml";
+
+            //if (dialogOpen.ShowDialog() == true)
+            //{
+            //    wd.Flush();
+            //    AddDesigner(dialogOpen.FileName);
+            //}
         }
     }
 }
